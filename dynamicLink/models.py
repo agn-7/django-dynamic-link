@@ -7,7 +7,10 @@ __copyright__ = "Copyright (c) " + "28.08.2010" + " Andreas Fritz"
 __licence__ = "New BSD Licence"
 
 
-import presettings
+try:
+    import presettings
+except ImportError:
+    from . import presettings
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _

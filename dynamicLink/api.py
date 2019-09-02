@@ -2,8 +2,12 @@
 # -*- coding:utf-8 -*-
 # This Python file uses the following encoding: utf-8
 
-from models import Download
-import presettings
+try:
+    from models import Download
+    import presettings
+except ImportError:
+    from .models import Download
+    from . import presettings
 
 
 def file_link_url(request, linkobject, langcode='lg'):

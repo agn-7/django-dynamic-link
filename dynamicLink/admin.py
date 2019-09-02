@@ -8,10 +8,17 @@ __licence__ = """New BSD Licence"""
 __doc__ = """Zur Zeit noch keine Dokumentation."""
 
 from django.contrib import admin
-from models import Download
+try:
+    from models import Download
+except ImportError:
+    from .models import Download
 from django.utils.translation import ugettext_lazy as _
-import api
-import presettings
+try:
+    import presettings
+    import api
+except ImportError:
+    from . import presettings
+    from . import api
 
 
 class DownLinkAdmin(admin.ModelAdmin):
@@ -36,14 +43,21 @@ class DownLinkAdmin(admin.ModelAdmin):
 
     def valid(self, obj):
         """Shows timestamp expired or active time"""
-        diff = unicode(obj.get_timout_time()).split('.')[0]
+        try:
+            diff = unicode(obj.get_timout_time()).split('.')[0]
+        except:
+            diff = str(obj.get_timout_time()).split('.')[0]
         if obj.timeout_time():
             if obj.active:
                 # set active to false
                 obj.active = False
                 obj.save()
-            return '<span style="color: #FF7F00; ">%s</span>:<br/> ' \
-            % (unicode(_(u'timeout'))) + diff
+            try:
+                return '<span style="color: #FF7F00; ">%s</span>:<br/> ' \
+                       % (unicode(_(u'timeout'))) + diff
+            except:
+                return '<span style="color: #FF7F00; ">%s</span>:<br/> ' \
+                       % (str(_(u'timeout'))) + diff
         else:
             return diff
     valid.allow_tags = True
@@ -51,23 +65,37 @@ class DownLinkAdmin(admin.ModelAdmin):
 
     def file(self, obj):
         """Shows truncated filename on platform indepentend length."""
-        return unicode(obj.file_path).split(presettings.DYNAMIC_LINK_MEDIA)[-1]
+        try:
+            return unicode(obj.file_path).split(presettings.DYNAMIC_LINK_MEDIA)[-1]
+        except:
+            return str(obj.file_path).split(presettings.DYNAMIC_LINK_MEDIA)[-1]
     file.allow_tags = True
     file.short_description = _(u'file')
 
     def clicks(self, obj):
         """Shows current and max allowed clicks in the list display"""
-        txt = '%s %s %s' % (obj.current_clicks, unicode(_(u'from')), obj.max_clicks)
+        try:
+            txt = '%s %s %s' % (obj.current_clicks, unicode(_(u'from')), obj.max_clicks)
+        except:
+            txt = '%s %s %s' % (obj.current_clicks, str(_(u'from')), obj.max_clicks)
         if obj.timeout_clicks():
             if obj.active == True:
                 # set active to false
                 obj.active = False
                 obj.save()
-            return '<span style="color: #FF7F00; ">%s</span><br/>%s' \
-            % (unicode(_('max clicks reached')), txt)
+            try:
+                return '<span style="color: #FF7F00; ">%s</span><br/>%s' \
+                       % (unicode(_('max clicks reached')), txt)
+            except:
+                return '<span style="color: #FF7F00; ">%s</span><br/>%s' \
+                       % (str(_('max clicks reached')), txt)
         elif obj.max_clicks == 0:
-            return '%s %s <span style="color: #FF7F00; ">%s</span>' \
-            % (obj.current_clicks, unicode(_(u'from')), unicode(_(u'unlimited')))
+            try:
+                return '%s %s <span style="color: #FF7F00; ">%s</span>' \
+                       % (obj.current_clicks, unicode(_(u'from')), unicode(_(u'unlimited')))
+            except:
+                return '%s %s <span style="color: #FF7F00; ">%s</span>' \
+                       % (obj.current_clicks, str(_(u'from')), str(_(u'unlimited')))
         else:
             return txt
     clicks.allow_tags = True
@@ -79,12 +107,21 @@ class DownLinkAdmin(admin.ModelAdmin):
         # download site with link
         siteurl = api.DownloadSiteUrl([obj.link_key])
         sitelink = siteurl.get_site_url(self.request)
-        sitelink = u'<span style="color: #FF7F00; ">%s:</span> \
-        <a target="new" href="%s/">%s/</a><br/>' % (unicode(_(u'Site')), sitelink, sitelink)
+        try:
+            sitelink = u'<span style="color: #FF7F00; ">%s:</span> \
+            <a target="new" href="%s/">%s/</a><br/>' % (unicode(_(u'Site')), sitelink, sitelink)
+        except:
+            sitelink = u'<span style="color: #FF7F00; ">%s:</span> \
+                        <a target="new" href="%s/">%s/</a><br/>' % (
+            str(_(u'Site')), sitelink, sitelink)
 
         # direct accessable link
         filelink = api.file_link_url(self.request, obj)
-        filelink = '<span style="color: #FF7F00; ">%s:</span> %s' % (unicode(_(u'File')), filelink)
+        try:
+            filelink = '<span style="color: #FF7F00; ">%s:</span> %s' % (unicode(_(u'File')), filelink)
+        except:
+            filelink = '<span style="color: #FF7F00; ">%s:</span> %s' % (
+            str(_(u'File')), filelink)
 
         return sitelink + filelink
     link.allow_tags = True
