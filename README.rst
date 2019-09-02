@@ -82,7 +82,7 @@ Installation
         >>> import dynamicLink
         >>> dynamicLink.CKINST()
         >>> dynamicLink.VERSION
-        >>> dynamicLInk.REQUIRES
+        >>> dynamicLink.REQUIRES
         >>> help(dynamicLink)
         >>> exit()
     
