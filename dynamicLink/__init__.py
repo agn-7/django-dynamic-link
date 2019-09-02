@@ -1,6 +1,6 @@
 try:
     import version
-except:
+except ImportError:
     from . import version
 
 import os
