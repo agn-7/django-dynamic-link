@@ -12,6 +12,7 @@ def file_link_url(request, linkobject, langcode='lg'):
             langcode, presettings.DYNAMIC_LINK_URL_BASE_COMPONENT, linkobject.link_key, \
             linkobject.get_filename())
 
+
 class DynamicLink:
     """
     create and access dynamic links form outsite of this app
@@ -37,6 +38,7 @@ class DynamicLink:
         """access his url"""
         return file_link_url(request, self.new_link, langcode)
 
+
 class DownloadSiteUrl():
     """
     create a download site with links from the given keys
@@ -55,6 +57,7 @@ class DownloadSiteUrl():
         """returns a site urls form allready given keys"""
         return '%s%s/%s/%s/site/%s' % ('http://', request.META.get('HTTP_HOST'), \
         langcode, presettings.DYNAMIC_LINK_URL_BASE_COMPONENT, '-'.join(self.keys))
+
 
 
 

@@ -137,9 +137,11 @@ class Download(models.Model):
     def __unicode__(self):
         return '%s: %s, %s: %s' % (unicode(_(u'Slug')), self.slug, unicode(_(u'Filename')), self.get_filename())
 
+
 class IsExpiredError(Exception):
     """Error class for expired link objects"""
     def __init__(self, value=''):
         self.value = presettings.TEXT_REQUEST_IS_EXPIRED + value
+
     def __str__(self):
         return repr(self.value)

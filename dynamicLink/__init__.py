@@ -1,6 +1,9 @@
-import version
+try:
+    import version
+except:
+    from . import version
+
 import os
-import django
 import sys
 import django
 
@@ -15,6 +18,7 @@ except IOError:
     __doc__ = 'For full documentation review the README file in your package or go to:' \
     'http://pypi.python.org/pypi/django-dynamic-link/'
     __docformat__ = 'txt'
+
 
 def CKINST():
     """function to find problems of the installation."""
